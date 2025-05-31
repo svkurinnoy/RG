@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчет по логистике - Retail Group</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Светло-голубой фон */
+        }
+        .header-bg {
+            background-color: #1e3a8a; /* Темно-синий */
+        }
+        .card {
+            background-color: #ffffff; /* Белый */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .text-main-blue {
+            color: #1e3a8a; /* Темно-синий */
+        }
+        .text-accent-blue {
+            color: #3b82f6; /* Ярко-синий */
+        }
+        .bg-accent-blue {
+            background-color: #3b82f6; /* Ярко-синий */
+        }
+        .border-accent-blue {
+            border-color: #3b82f6;
+        }
+        .kpi-value {
+            font-size: 1.875rem; /* 30px */
+            font-weight: 700;
+        }
+        .kpi-label {
+            font-size: 0.875rem; /* 14px */
+            color: #4b5563; /* Серый */
+        }
+        .section-title {
+            font-size: 1.5rem; /* 24px */
+            font-weight: 600;
+            color: #1e3a8a; /* Темно-синий */
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3b82f6; /* Ярко-синий */
+        }
+        .tab-button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-weight: 500;
+        }
+        .tab-button.active {
+            background-color: #1e3a8a; /* Темно-синий */
+            color: #ffffff; /* Белый */
+        }
+        .tab-button:not(.active) {
+            background-color: #e0e7ff; /* Светло-голубой/лавандовый */
+            color: #1e3a8a; /* Темно-синий */
+        }
+        .tab-button:not(.active):hover {
+            background-color: #c7d2fe; /* Голубой/лавандовый потемнее */
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            background-color: #ffffff;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .growth-indicator {
+            color: #16a34a; /* Зеленый */
+            font-weight: 600;
+        }
+        .fall-indicator {
+            color: #dc2626; /* Красный */
+            font-weight: 600;
+        }
+        .neutral-indicator {
+            color: #4b5563; /* Серый */
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <header class="header-bg text-white p-6 shadow-md">
+        <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center">
+            <h1 class="text-3xl font-bold">Retail Group</h1>
+            <p class="text-xl mt-2 sm:mt-0">Еженедельныe итоги. Логистика - 21 неделя 2025</p>
+            <p class="text-sm mt-1 sm:mt-0">(19.05.2025 - 25.05.2025)</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8">
+        <section id="kpi" class="mb-8">
+            <h2 class="section-title">Ключевые показатели</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="card p-6">
+                    <p class="kpi-label">Объем отгрузок с РЦ</p>
+                    <p class="kpi-value text-main-blue">427,53 <span class="text-lg">млн грн</span></p>
+                    <p class="growth-indicator mt-1">▲ 102,64 млн грн (к 20 нед.)</p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">Утилизация транспорта (Объем/ГМ)</p>
+                    <p class="kpi-value text-main-blue">94,6%</p>
+                    <p class="neutral-indicator mt-1">Цель: 95%</p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">Утилизация транспорта (Вес)</p>
+                    <p class="kpi-value text-main-blue">85,1%</p>
+                    <p class="growth-indicator mt-1">Цель: 85% (достигнуто)</p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">SL Поставщиков (Общий)</p>
+                    <p class="kpi-value text-main-blue">96,47%</p>
+                    <p class="fall-indicator mt-1">Цель: 97% (не достигнуто)</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="transport-delivery" class="mb-8">
+            <h2 class="section-title">Транспорт и Доставка</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="card p-4">
+                    <h3 class="text-lg font-semibold text-main-blue mb-2 text-center">Стоимость доставки 1 ГМ (грн)</h3>
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="deliveryCostChart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6">
+                    <h3 class="text-lg font-semibold text-main-blue mb-4">Утилизация по грузоподъемности (ГМ) и Весу (21 нед.)</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="font-medium text-gray-700">3,5 тонны</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <p class="text-sm text-gray-600">Объем (ГМ):</p>
+                                <p class="text-sm font-semibold text-accent-blue">92,7%</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-0.5">
+                                <p class="text-sm text-gray-600">Вес:</p>
+                                <p class="text-sm font-semibold text-main-blue">82,5%</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-700">5 тонн</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <p class="text-sm text-gray-600">Объем (ГМ):</p>
+                                <p class="text-sm font-semibold text-accent-blue">94,8%</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-0.5">
+                                <p class="text-sm text-gray-600">Вес:</p>
+                                <p class="text-sm font-semibold text-main-blue">79,3%</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-700">7-10-15 тонн</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <p class="text-sm text-gray-600">Объем (ГМ):</p>
+                                <p class="text-sm font-semibold text-accent-blue">88,1%</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-0.5">
+                                <p class="text-sm text-gray-600">Вес:</p>
+                                <p class="text-sm font-semibold text-main-blue">96,4%</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="font-medium text-gray-700">21 тонна</p>
+                            <div class="flex justify-between items-center mt-1">
+                                <p class="text-sm text-gray-600">Объем (ГМ):</p>
+                                <p class="text-sm font-semibold text-accent-blue">80,9%</p>
+                            </div>
+                            <div class="flex justify-between items-center mt-0.5">
+                                <p class="text-sm text-gray-600">Вес:</p>
+                                <p class="text-sm font-semibold text-main-blue">96,4%</p>
+                            </div>
+                        </div>
+                    </div>
+                     <p class="text-xs text-center text-gray-500 mt-6">SL Доставки в магазины (вчасно): <strong>97,86%</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="shipments" class="mb-8">
+            <h2 class="section-title">Отгрузки и Поставки</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="card p-4">
+                    <h3 class="text-lg font-semibold text-main-blue mb-2 text-center">Структура отгрузок по категориям (21 нед.)</h3>
+                    <div class="chart-container">
+                        <canvas id="shipmentCategoryChart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-4">
+                    <h3 class="text-lg font-semibold text-main-blue mb-2 text-center">Отгрузки по РЦ (21 нед.)</h3>
+                    <div class="chart-container">
+                        <canvas id="shipmentDCChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dc-performance" class="mb-8">
+            <h2 class="section-title">Производительность РЦ</h2>
+            <div class="mb-4 flex space-x-2 border-b border-gray-300 flex-wrap">
+                <button class="tab-button active mb-1 sm:mb-0" onclick="showTab('dc-performance', 'overall')">Общая</button>
+                <button class="tab-button mb-1 sm:mb-0" onclick="showTab('dc-performance', 'rc1')">РЦ-1</button>
+                <button class="tab-button mb-1 sm:mb-0" onclick="showTab('dc-performance', 'rc2')">РЦ-2</button>
+                <button class="tab-button mb-1 sm:mb-0" onclick="showTab('dc-performance', 'points')">В Баллах</button>
+            </div>
+
+            <div id="overall-dc-performance" class="tab-content-dc-performance">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card p-6">
+                        <p class="kpi-label">Общая производительность (РЦ-1 + РЦ-2)</p>
+                        <p class="kpi-value text-accent-blue">68,79 <span class="text-lg">кор/час</span></p>
+                        <p class="growth-indicator mt-1">Цель: 67,5 кор/час (превышено)</p>
+                    </div>
+                    <div class="card p-6">
+                        <p class="kpi-label">Производительность комплектовщиков (РЦ-1 + РЦ-2)</p>
+                        <p class="kpi-value text-accent-blue">158,06 <span class="text-lg">кор/час</span></p>
+                    </div>
+                </div>
+            </div>
+            <div id="rc1-dc-performance" class="tab-content-dc-performance" style="display: none;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div class="card p-6">
+                        <p class="kpi-label">Производительность РЦ-1</p>
+                        <p class="kpi-value text-accent-blue">61,85 <span class="text-lg">кор/час</span></p>
+                        <p class="growth-indicator mt-1">Цель: 58 кор/час (превышено)</p>
+                    </div>
+                    <div class="card p-6">
+                        <p class="kpi-label">Комплектовщики РЦ-1</p>
+                        <p class="kpi-value text-accent-blue">154,05 <span class="text-lg">кор/час</span></p>
+                    </div>
+                </div>
+            </div>
+            <div id="rc2-dc-performance" class="tab-content-dc-performance" style="display: none;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card p-6">
+                        <p class="kpi-label">Производительность РЦ-2</p>
+                        <p class="kpi-value text-accent-blue">86,28 <span class="text-lg">кор/час</span></p>
+                        <p class="fall-indicator mt-1">Цель: 90 кор/час (не достигнуто)</p>
+                    </div>
+                    <div class="card p-6">
+                        <p class="kpi-label">Комплектовщики РЦ-2</p>
+                        <p class="kpi-value text-accent-blue">155,62 <span class="text-lg">кор/час</span></p>
+                    </div>
+                </div>
+            </div>
+             <div id="points-dc-performance" class="tab-content-dc-performance" style="display: none;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="card p-6">
+                        <p class="kpi-label">Комплектовщики (РЦ-1+РЦ-2)</p>
+                        <p class="kpi-value text-accent-blue">178,0 <span class="text-lg">баллов/час</span></p>
+                    </div>
+                    <div class="card p-6">
+                        <p class="kpi-label">Грузчики (РЦ-1+РЦ-2)</p>
+                        <p class="kpi-value text-accent-blue">153,8 <span class="text-lg">баллов/час</span></p>
+                        <p class="fall-indicator mt-1">На 13,5% ниже комплектовщиков</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="supplier-sl" class="mb-8">
+            <h2 class="section-title">Уровень Сервиса Поставщиков (SL)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6">
+                    <p class="kpi-label">Общий SL отгрузки с РЦ (деньги)</p>
+                    <p class="kpi-value text-main-blue">99,86%</p>
+                    <p class="kpi-label">SL вовремя: 94,59%</p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">SL Централизованные поставки</p>
+                    <p class="kpi-value text-main-blue">96,60%</p>
+                     <p class="fall-indicator mt-1">Цель: 97%</p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">SL Локальные поставки</p>
+                    <p class="kpi-value text-main-blue">94,94%</p>
+                    <p class="fall-indicator mt-1">Цель: 97%</p>
+                </div>
+            </div>
+            <div class="card p-6 mt-6">
+                <h3 class="text-lg font-semibold text-main-blue mb-2">FLOP-3 Поставщика по сумме недопоставки:</h3>
+                <ul class="list-disc list-inside space-y-1 text-gray-700">
+                    <li>Агро-Овен: 1,21 млн грн (SL 83,48%)</li>
+                    <li>Не закуплена потреба: 1,19 млн грн (SL 0%)</li>
+                    <li>Интер Фрутс ЛТД: 637 тыс. грн (SL 80,32%)</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="personnel" class="mb-8">
+            <h2 class="section-title">Персонал</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="card p-6">
+                    <p class="kpi-label">Укомплектованность РЦ (Общая)</p>
+                    <p class="kpi-value text-main-blue">96%</p>
+                    <p class="kpi-label mt-1">Факт 288 / План 299. Вакантно: 11</p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">Принято за май</p>
+                    <p class="kpi-value text-main-blue">37 <span class="text-lg">чел.</span></p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">Уволено за май / 21 нед.</p>
+                    <p class="kpi-value text-main-blue">22 / 5 <span class="text-lg">чел.</span></p>
+                    <p class="kpi-label mt-1">Текучесть (накоп.): 8,14%</p>
+                </div>
+            </div>
+             <div class="card p-4 mt-6">
+                <h3 class="text-lg font-semibold text-main-blue mb-2 text-center">Структура персонала по стажу</h3>
+                <div class="chart-container" style="height: 300px;">
+                    <canvas id="personnelExperienceChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="packing-dept" class="mb-8">
+            <h2 class="section-title">Цех Фасовки</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <p class="kpi-label">Выполнение плана (Май)</p>
+                    <p class="kpi-value text-main-blue">96%</p>
+                    <p class="kpi-label mt-1">344т / 360т</p>
+                </div>
+                <div class="card p-6">
+                    <p class="kpi-label">Проблемы</p>
+                    <ul class="list-disc list-inside text-gray-700 mt-1">
+                        <li>Товарные дыры: 196 SKU</li>
+                        <li>Отсутствие сырья: 18 SKU</li>
+                        <li>Качество: жалобы на разрыв пакетов</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="priorities">
+            <h2 class="section-title">Приоритеты на следующий период</h2>
+            <div class="card p-6">
+                <ul class="list-decimal list-inside space-y-2 text-gray-800">
+                    <li>Разработка автозаказа на промо (АЦ) – 20.06.25.</li>
+                    <li>Оценка продуктивности сотрудников РЦ в баллах: анализ данных, разработка операций приемки.</li>
+                    <li>Перевозка мяса отдельным транспортом по Киеву: ожидание второй партии термоштор до 06.06.2025.</li>
+                    <li>Разработка чат-бота по регистрации транспорта – тестовый вариант 06.06.25.</li>
+                    <li>Разработка функционала выкладки товара на полку ТП в мобильном устройстве – 30.05.25.</li>
+                    <li>Участие в проекте логистики Молдова.</li>
+                    <li>Подготовка регламента по тарифам логистики – 30.05.2025.</li>
+                    <li>Пересмотр масок поставки >3 дней от заказа до поставки, изменение алгоритма заказа.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center p-6 mt-10 bg-gray-100 border-t border-gray-300">
+        <p class="text-sm text-gray-600">&copy; <span id="currentYear"></span> Retail Group. Все права защищены.</p>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        Chart.register(ChartDataLabels);
+
+        // Helper function to get contrasting text color (black or white) for a given hex background
+        function getContrastYIQ(hexcolor){
+            if (!hexcolor || typeof hexcolor !== 'string' || !hexcolor.startsWith('#')) return '#ffffff'; // Default to white
+            let color = hexcolor.substring(1); // remove #
+            if (color.length === 3) { // expand #RGB to #RRGGBB
+                color = color.split('').map(char => char + char).join('');
+            }
+            if (color.length !== 6) return '#ffffff'; // Default if not a valid 3 or 6 char hex
+
+            const r = parseInt(color.substr(0,2),16);
+            const g = parseInt(color.substr(2,2),16);
+            const b = parseInt(color.substr(4,2),16);
+            const yiq = ((r*299)+(g*587)+(b*114))/1000;
+            return (yiq >= 128) ? '#000000' : '#ffffff';
+        }
+
+        // Helper function to get a semi-transparent background for labels
+        function getLabelBackgroundColor(bgColor, alpha = 0.7) {
+            if (!bgColor || typeof bgColor !== 'string') return `rgba(0,0,0,${alpha})`;
+
+            const alphaHex = Math.round(alpha * 255).toString(16).padStart(2, '0');
+
+            if (bgColor.startsWith('#')) {
+                let color = bgColor.substring(1);
+                if (color.length === 3) { // expand #RGB to #RRGGBB
+                    color = color.split('').map(char => char + char).join('');
+                }
+                if (color.length === 6) return `#${color}${alphaHex}`;
+            } else if (bgColor.startsWith('rgb(')) { // Handle rgb(r, g, b)
+                return bgColor.replace('rgb(', 'rgba(').replace(')', `, ${alpha})`);
+            } else if (bgColor.startsWith('rgba(')) { // Handle rgba(r, g, b, a)
+                const parts = bgColor.slice(bgColor.indexOf('(') + 1, bgColor.lastIndexOf(')')).split(',');
+                if (parts.length === 3) { // rgb inside rgba but no alpha
+                    return `rgba(${parts[0].trim()},${parts[1].trim()},${parts[2].trim()},${alpha})`;
+                }
+                if (parts.length === 4) { // already has alpha, override it
+                    return `rgba(${parts[0].trim()},${parts[1].trim()},${parts[2].trim()},${alpha})`;
+                }
+            }
+            return `rgba(0,0,0,${alpha})`; // Fallback
+        }
+
+
+        function showTab(sectionPrefix, tabName) {
+            const tabs = document.querySelectorAll(`.tab-content-${sectionPrefix}`);
+            tabs.forEach(tab => {
+                tab.style.display = 'none';
+            });
+            document.getElementById(`${tabName}-${sectionPrefix}`).style.display = 'block';
+
+            const buttons = document.querySelectorAll(`#${sectionPrefix} .tab-button`);
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        const shipmentCategoryData = {
+            labels: ['Гастрономия', 'Бакалея', 'Табачные изделия', 'Сладкая бакалея', 'Сыры', 'Прочие'],
+            datasets: [{
+                label: 'Объем отгрузок (млн грн)',
+                data: [80.23, 66.40, 65.06, 56.60, 48.75, (427.53 - 80.23 - 66.40 - 65.06 - 56.60 - 48.75).toFixed(2) ],
+                backgroundColor: ['#0077b6', '#00b4d8', '#48cae4', '#90e0ef', '#ade8f4', '#caf0f8'],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+
+        const shipmentDCData = {
+            labels: ['РЦ-1', 'РЦ-2', 'РЦЗ', 'Прямая поставка'],
+            datasets: [{
+                label: 'Структура поступлений (млн грн)',
+                data: [246.81, 143.47, 37.73, 32.28],
+                backgroundColor: ['#03045e', '#0077b6', '#00b4d8', '#90e0ef'],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+        
+        const personnelExperienceData = {
+            labels: ['0-3 мес', '3-6 мес', '6-12 мес', '12+ мес'],
+            datasets: [{
+                label: 'Количество сотрудников',
+                data: [50, 19, 40, 179],
+                backgroundColor: ['#93c5fd', '#60a5fa', '#3b82f6', '#1e3a8a'],
+                borderColor: '#ffffff',
+                borderWidth: 2
+            }]
+        };
+        
+        const deliveryCostData = {
+            labels: ['Регионы', 'Киев'],
+            datasets: [{
+                label: 'Стоимость (грн/ГМ) за 21 нед.',
+                data: [607, 296],
+                backgroundColor: ['#1e3a8a', '#3b82f6'],
+                borderColor: ['#1e40af', '#2563eb'],
+                borderWidth: 1,
+                borderRadius: 5
+            }]
+        };
+
+        const datalabelsCommonConfig = { // Renamed for clarity
+            borderRadius: 4,
+            font: { weight: 'bold', size: 10 },
+            formatter: (value, context) => {
+                if (context.chart.config.type === 'pie' || context.chart.config.type === 'doughnut') {
+                    const total = context.chart.data.datasets[0].data.reduce((acc, data) => acc + parseFloat(data), 0);
+                    const percentage = ((parseFloat(value) / total) * 100).toFixed(1) + '%';
+                    return `${value}\n(${percentage})`;
+                }
+                return value;
+            }
+        };
+
+        const pieDoughnutDatalabelsConfig = {
+            ...datalabelsCommonConfig,
+            color: (context) => getContrastYIQ(context.dataset.backgroundColor[context.dataIndex]),
+            backgroundColor: (context) => getLabelBackgroundColor(context.dataset.backgroundColor[context.dataIndex], 0.7),
+            anchor: 'end',
+            align: 'start',
+            offset: -10,
+        };
+        
+        const personnelDatalabelsConfig = { 
+            ...datalabelsCommonConfig,
+            color: (context) => getContrastYIQ(context.dataset.backgroundColor[context.dataIndex]),
+            backgroundColor: (context) => getLabelBackgroundColor(context.dataset.backgroundColor[context.dataIndex], 0.5),
+            align: 'center', 
+            anchor: 'center', 
+            offset: 0 
+        };
+
+        const barChartDatalabelsConfig = { 
+            ...datalabelsCommonConfig,
+            color: '#ffffff', 
+            anchor: 'center', 
+            align: 'center', 
+            formatter: (value) => `${value} грн` 
+        };
+
+        window.addEventListener('load', () => {
+            try {
+                const initChart = (canvasId, type, data, datalabelsOptions) => {
+                    const ctx = document.getElementById(canvasId)?.getContext('2d');
+                    if (ctx) {
+                        new Chart(ctx, { 
+                            type, 
+                            data, 
+                            options: { 
+                                responsive: true, 
+                                maintainAspectRatio: false, 
+                                plugins: { 
+                                    legend: { position: 'bottom' }, 
+                                    title: { display: false }, 
+                                    datalabels: datalabelsOptions 
+                                }
+                            } 
+                        });
+                    }
+                };
+
+                initChart('deliveryCostChart', 'bar', deliveryCostData, barChartDatalabelsConfig);
+                initChart('shipmentCategoryChart', 'doughnut', shipmentCategoryData, pieDoughnutDatalabelsConfig);
+                initChart('shipmentDCChart', 'pie', shipmentDCData, pieDoughnutDatalabelsConfig);
+                initChart('personnelExperienceChart', 'pie', personnelExperienceData, personnelDatalabelsConfig);
+            } catch (error) {
+                console.error("Ошибка при инициализации диаграмм:", error);
+            }
+        });
+    </script>
+</body>
+</html>
